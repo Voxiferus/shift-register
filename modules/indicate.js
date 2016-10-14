@@ -12,6 +12,8 @@ class indicator {
             return list;
         };
 
+        this.length = length;
+
         // Set up indicator states matrix
         this.digits = {
             1: [0,1,0,0,1,0,0,0],
@@ -24,7 +26,8 @@ class indicator {
             8: [0,1,1,1,1,1,1,1],
             9: [0,1,1,0,1,1,1,1],
             0: [0,1,1,1,1,1,1,0],
-            N: [0,0,0,0,0,0,0,1] // Dash symbol
+            N: [0,0,0,0,0,0,0,1], // Dash symbol
+            B: [0,0,0,0,0,0,0,0] //Blank
         };
 
         // Set up pins
@@ -46,17 +49,32 @@ class indicator {
 
         // Converts number to array of signals to be send
         const numberToSignals = function(number){
-            return number
+            var output =[];
+            number
                 .toString()
                 .split("")
-                .pad(length)
-                .reverse()
-                .map(function(value){
-                    return inst.digits[value] === undefined ? inst.digits["N"] : inst.digits[value];
-                })
-                .reduce(function(previous, current, index, array){
-                    return previous.concat(current)
-                });
+                .forEach(function(current, index, array){
+                    if(current !== "."){
+                        var symbol = inst.digits[current];
+                        if (symbol === undefined){
+                            symbol = inst.digits["N"]
+                        }else if(array[index+1] === "."){
+                            symbol[0] = 1;
+                        }
+
+                        output.unshift(symbol);
+                    }
+                },[]);
+
+            output = output.slice(-inst.length);
+
+            while (output.length < inst.length){
+                output.push(inst.digits["B"])
+            }
+
+            return output.reduce(function(prev, current){
+                return prev.concat(current)
+            });
         };
 
         var signals = numberToSignals(number);
