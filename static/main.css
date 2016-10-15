@@ -1,0 +1,44 @@
+@import url('https://fonts.googleapis.com/css?family=Open+Sans');
+
+body {
+    display: flex;
+    height: 100vh;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    background-color: #222;
+    font-family: 'Open Sans', sans-serif;
+}
+
+div.currencies-list {
+    justify-content: space-around;
+    display: flex;
+    flex-flow: row;
+    flex-wrap: wrap;
+    max-width: 500px;
+}
+
+div.currencies-list > div {
+    background-color: #505050;
+    margin:5px;
+    color: white;
+    font-size:14px;
+    cursor: pointer;
+    flex-basis:15%;
+    flex-grow: 1;
+    flex-shrink: 0;
+}
+
+div.currencies-list > div.selected {
+    background-color: #0aa699;
+}
+
+div.currencies-list > div > div {
+    padding: 10px;
+    text-align: center;
+}
+
+div.currencies-list > div > div:first-child {
+    border-bottom: 2px solid rgba(255,255,255,0.3);
+}
+

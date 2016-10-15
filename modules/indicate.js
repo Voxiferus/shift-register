@@ -57,11 +57,11 @@ class indicator {
                     if(current !== "."){
                         var symbol = inst.digits[current];
                         if (symbol === undefined){
-                            symbol = inst.digits["N"]
+                            symbol = Array.from(inst.digits["N"])
                         }else if(array[index+1] === "."){
+                            symbol = Array.from(symbol);
                             symbol[0] = 1;
                         }
-
                         output.unshift(symbol);
                     }
                 },[]);
