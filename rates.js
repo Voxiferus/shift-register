@@ -9,26 +9,26 @@ const http = require('http');
 const server = http.Server(app);
 const io = require('socket.io')(server);
 
+const request = require("request");
+
+const fixerUrl = "http://api.fixer.io/latest?base=USD";
+
 var exchangeRates, currentTicker = "EUR";
 
 var getExchangeRates = function(){
-    http
-        .get("http://api.fixer.io/latest?base=USD",function(res){
-            var data = "";
-            res
-                .on("data", function(chunk){
-                    data += chunk.toString();
-                })
-                .on("end", function(){
-                    try{
-                        data = JSON.parse(data);
-                        exchangeRates = data["rates"];
-                        indicate();
-                    }catch(err){
-                        console.log(err);
-                    }
-                })
-        })
+    request(fixerUrl, function (error, response, body) {
+        if (error === null && response.statusCode == 200) {
+            try{
+                var data = JSON.parse(body);
+                exchangeRates = data["rates"];
+                indicate();
+            }catch(err){
+                console.log(err);
+            }
+        }else{
+            console.log(err);
+        }
+    });
 };
 
 var indicate = function(){
@@ -59,7 +59,7 @@ io.on('connection', function(socket){
     });
 });
 
-app.use("/", express.static('static'))
+app.use("/", express.static('static'));
 
 server
     .listen(port,function(){

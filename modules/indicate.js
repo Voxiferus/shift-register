@@ -27,7 +27,7 @@ class indicator {
             9: [0,1,1,0,1,1,1,1],
             0: [0,1,1,1,1,1,1,0],
             N: [0,0,0,0,0,0,0,1], // Dash symbol
-            B: [0,0,0,0,0,0,0,0] //Blank
+            B: [0,0,0,0,0,0,0,0] // Blank symbol
         };
 
         // Set up pins
@@ -37,7 +37,7 @@ class indicator {
 
         this.clockPin = gpio.init(socket+"B");
         this.clockPin.setDirection("output");
-        this. clockPin.setValue(0);
+        this.clockPin.setValue(0);
 
         this.latchPin = gpio.init(socket+"C");
         this.latchPin.setDirection("output");

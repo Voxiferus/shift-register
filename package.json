@@ -12,6 +12,7 @@
     "@tibbo-tps/gpio": "0.0.2",
     "@tibbo-tps/tibbit-28": "0.0.3",
     "express": "^4.14.0",
+    "request": "^2.75.0",
     "socket.io": "^1.5.0"
   }
 }
