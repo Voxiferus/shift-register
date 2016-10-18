@@ -2,16 +2,6 @@ const gpio = require("@tibbo-tps/gpio");
 
 class indicator {
     constructor(socket, length){
-        // Pad function crops array or adds leading zeros
-        Array.prototype.pad = function(count){
-            var list = this.slice(-count);
-            while(list.length < count){
-                list.unshift(0)
-            }
-
-            return list;
-        };
-
         this.length = length;
 
         // Set up indicator states matrix
@@ -66,8 +56,10 @@ class indicator {
                     }
                 },[]);
 
+            // crop number to first "length" digits, if needed
             output = output.slice(-inst.length);
 
+            // pad number with spaces if it's shorter than 4 digits
             while (output.length < inst.length){
                 output.push(inst.digits["B"])
             }
@@ -79,19 +71,25 @@ class indicator {
 
         var signals = numberToSignals(number);
 
-        // set ST_CP to LOW
+        // Set ST_CP (latch) to LOW
+        // This operation puts shift registers into "programming" mode.
+        // Then latch is low shift register do not change output states,
+        // but reads and "remembers" data from DS pin.
         inst.latchPin.setValue(0);
 
         signals.forEach(function(value){
-            // set DS to value to be pushed
+            // set value to be pushed into register on DS pin
             inst.dataPin.setValue(value);
 
-            // set SH_CP to HIGH and then to LOW
+            // set SH_CP (clock) to HIGH and then to LOW
+            // on rising edge of clock shift register read state from DS pin, and prepares it for setting on Q0 output.
+            // The previously read values will be shifted each to the next pin.
             inst.clockPin.setValue(1);
             inst.clockPin.setValue(0);
         });
 
-        // then all signals are sent put latch to HIGH
+        // then all signals are sent ST_CP (latch) to HIGH
+        // If latch is HIGH, all the read values will be simultaneously set to the outputs.
         inst.latchPin.setValue(1);
     };
 }
