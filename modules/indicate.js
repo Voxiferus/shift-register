@@ -1,4 +1,8 @@
-const gpio = require("@tibbo-tps/gpio");
+
+const TPSpmap = require( '@tibbo-tps/pinmap');
+const { version, Chip, Line } = require( "node-libgpiod");
+
+global.chip = new Chip(0);
 
 class indicator {
     constructor(socket, length){
@@ -21,16 +25,16 @@ class indicator {
         };
 
         // Set up pins
-        this.dataPin = gpio.init(socket+"A");
-        this.dataPin.setDirection("output");
+        this.dataPin = new Line(chip, TPSpmap.getRpin( socket+"A"));
+        this.dataPin.requestOutputMode();
         this.dataPin.setValue(0);
 
-        this.clockPin = gpio.init(socket+"B");
-        this.clockPin.setDirection("output");
+        this.clockPin = new Line(chip, TPSpmap.getRpin( socket+"B"));
+        this.clockPin.requestOutputMode();
         this.clockPin.setValue(0);
 
-        this.latchPin = gpio.init(socket+"C");
-        this.latchPin.setDirection("output");
+        this.latchPin = new Line(chip, TPSpmap.getRpin( socket+"C"));
+        this.latchPin.requestOutputMode();
         this.latchPin.setValue(0);
     }
 

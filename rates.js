@@ -1,5 +1,5 @@
 const leds = require("./modules/indicate.js");
-const indicator = new leds("S17",4);
+const indicator = new leds("S13",4);
 
 const port = 3000;
 
@@ -26,7 +26,7 @@ var getExchangeRates = function(){
                 console.log(err);
             }
         }else{
-            console.log(err);
+            console.log('OK');
         }
     });
 };
